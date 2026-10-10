@@ -65,7 +65,19 @@ pnpm run check:math
 - `\left` / `\right` 的定界符是否合法且**成对匹配**（含 `\lVert…\rVert`、`\langle…\rangle` 等命令式定界符）；
 - 跨行的 `$$...$$` 块与行内 `$...$` 是否都能被正确切分。
 
-**已知局限**：KaTeX 本身允许 `\operatorname`，所以脚本**查不出 GitHub 特有的宏黑名单**。撰写新公式时请只用常见宏，避开 `\operatorname`、`\def`、`\newcommand`、`\href`、`\substack`、`\label`。本笔记当前使用的 78 个宏均已确认可在 GitHub 渲染。
+**已知局限**：KaTeX 本身允许 `\operatorname`，所以脚本**查不出 GitHub 特有的宏黑名单**。撰写新公式时请只用常见宏，避开下面这些已在 GitHub 上实测失败的命令。本笔记当前使用的宏均已逐个确认可渲染。
+
+## Markdown 书写约定（这几种写法在 GitHub 上实测会出问题）
+
+| 约定 | 说明 |
+|---|---|
+| **列表项里只用块级公式** | 列表项（`-` 开头）内的行内 `$...$` 在 GitHub 上容易被当成普通文字不渲染。本笔记已把列表项里的公式**全部改成独立块** `$$...$$`，并缩进两格挂在列表项下；符号类（`K`、`C`、`ρ`）直接写成文字。 |
+| **公式块后留空行** | 缩进公式块后面若紧跟下一个列表项，需空一行，否则列表可能被截断。 |
+| **避开高危宏** | 实测失败：`\operatorname`、`\!`、`\medspace`、`\left\{`、`\left\lVert`、`\left\langle`、`\left|`、`\;`、`\,`、`\ `（反斜杠+空格）。 |
+| **改用安全写法** | `\left\{…\right\}` → `\lbrace…\rbrace`；`\left\lVert…\right\rVert` → `\lVert…\rVert`；`\!`/`\,`/`\;`/`\ ` → 普通空格；`\operatorname{softmax}` → `\mathrm{softmax}`；需要间距时用 `\quad` / `\qquad`。 |
+
+命令逐个覆盖测试见 [命令覆盖检查.md](命令覆盖检查.md)，各风险写法的对照见 [渲染自检.md](渲染自检.md)。
+
 
 ## 许可
 
