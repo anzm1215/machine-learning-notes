@@ -42,24 +42,30 @@ InfoNCE      : −log exp(sim(z,z⁺)/τ) / ∑_j exp(sim(z,z_j)/τ)
 MAML         : θ'_i=θ−α∇L_i(θ) ;  θ ← θ−β∇∑_i L_i(θ'_i)
 ```
 
-## 公式校验（避免 GitHub 渲染报错）
+## 公式校验（避免 GitHub 渲染错误）
 
-GitHub 的公式渲染器有**宏白名单**，一旦用了被禁的宏（例如 `\operatorname`、`\def`、`\newcommand`），页面只会显示一行红色报错，而本地 Markdown 预览看不出任何问题。仓库内置了一个校验脚本，用 GitHub 同款渲染器 KaTeX 把每个公式编译一遍：
+> **改公式前先读 [GitHub公式规则.md](GitHub公式规则.md)** —— 那份清单记录了 GitHub 公式渲染的机制与逐条实测结论（尤其是"本地 KaTeX 校验查不出 GitHub 黑名单"这件事）。
+
+仓库内置两个检查脚本，一条命令跑完：
 
 ```bash
 pnpm install          # 或 npm install，只为装 katex
-pnpm run check:math
+pnpm run check        # = check:math + check:github
 ```
 
-输出示例：
+- **`check:math`**（`tools/check-math.mjs`）—— 用 KaTeX 把每个公式编译一遍，查语法、括号配平、`\left`/`\right` 配对、块级/行内切分。输出示例：
 
-```
-公式总数        : 127（块级 103，行内 24）
-可渲染          : 127
-失败            : 0
-```
+  ```
+  公式总数        : 123（块级 107，行内 16）
+  可渲染          : 123
+  失败            : 0
+  ```
 
-该脚本会同时检查：
+- **`check:github`**（`tools/preflight-github-math.mjs`）—— 查 **GitHub 特有的位置规则与命令黑名单**：公式块是否顶格、前后是否有空行、是否误放在列表项或表格里、是否用了 `\operatorname` / `\medspace` / `\!` / `\,` / `\;` / `\left\命令` 等实测失败的命令。文档里需要故意展示这些写法时，在该行加 `<!-- preflight-allow -->` 跳过检查。
+
+**两个脚本都通过 ≠ GitHub 一定渲染成功**：公式是客户端渲染的，静态抓取页面无法判断，最终仍需在浏览器里强刷确认。需要新增构造时，先加进 [渲染自检.md](渲染自检.md) 或 [命令覆盖检查.md](命令覆盖检查.md) 做对照测试。
+
+原 `check:math` 脚本会同时检查：
 
 - 每个公式能否被 KaTeX 解析（语法错误、非法命令）；
 - `\left` / `\right` 的定界符是否合法且**成对匹配**（含 `\lVert…\rVert`、`\langle…\rangle` 等命令式定界符）；

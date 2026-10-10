@@ -5,7 +5,9 @@
   "description": "机器学习名词自学笔记 + 公式校验工具",
   "type": "module",
   "scripts": {
-    "check:math": "node tools/check-math.mjs 机器学习名词自学笔记.md"
+    "check:math": "node tools/check-math.mjs 机器学习名词自学笔记.md",
+    "check:github": "node tools/preflight-github-math.mjs 机器学习名词自学笔记.md 渲染自检.md README.md GitHub公式规则.md",
+    "check": "npm run check:math && npm run check:github"
   },
   "devDependencies": {
     "katex": "^0.16.0"
