@@ -1,0 +1,4 @@
+# Markdown 与文本文件使用 LF，避免中文文档在跨平台协作时出现整文件换行抖动
+* text=auto eol=lf
+*.md text eol=lf
+*.txt text eol=lf
