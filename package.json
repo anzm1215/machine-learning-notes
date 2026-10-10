@@ -1,0 +1,13 @@
+{
+  "name": "machine-learning-notes",
+  "private": true,
+  "version": "1.0.0",
+  "description": "机器学习名词自学笔记 + 公式校验工具",
+  "type": "module",
+  "scripts": {
+    "check:math": "node tools/check-math.mjs 机器学习名词自学笔记.md"
+  },
+  "devDependencies": {
+    "katex": "^0.16.0"
+  }
+}

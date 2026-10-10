@@ -42,6 +42,31 @@ InfoNCE      : −log exp(sim(z,z⁺)/τ) / ∑_j exp(sim(z,z_j)/τ)
 MAML         : θ'_i=θ−α∇L_i(θ) ;  θ ← θ−β∇∑_i L_i(θ'_i)
 ```
 
+## 公式校验（避免 GitHub 渲染报错）
+
+GitHub 的公式渲染器有**宏白名单**，一旦用了被禁的宏（例如 `\operatorname`、`\def`、`\newcommand`），页面只会显示一行红色报错，而本地 Markdown 预览看不出任何问题。仓库内置了一个校验脚本，用 GitHub 同款渲染器 KaTeX 把每个公式编译一遍：
+
+```bash
+pnpm install          # 或 npm install，只为装 katex
+pnpm run check:math
+```
+
+输出示例：
+
+```
+公式总数        : 182（块级 50，行内 132）
+可渲染          : 182
+失败            : 0
+```
+
+该脚本会同时检查：
+
+- 每个公式能否被 KaTeX 解析（语法错误、非法命令）；
+- `\left` / `\right` 的定界符是否合法且**成对匹配**（含 `\lVert…\rVert`、`\langle…\rangle` 等命令式定界符）；
+- 跨行的 `$$...$$` 块与行内 `$...$` 是否都能被正确切分。
+
+**已知局限**：KaTeX 本身允许 `\operatorname`，所以脚本**查不出 GitHub 特有的宏黑名单**。撰写新公式时请只用常见宏，避开 `\operatorname`、`\def`、`\newcommand`、`\href`、`\substack`、`\label`。本笔记当前使用的 78 个宏均已确认可在 GitHub 渲染。
+
 ## 许可
 
 笔记内容可自由用于学习与教学用途；文中涉及的论文与算法版权归原作者所有。
